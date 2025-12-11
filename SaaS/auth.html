@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login/Cadastro</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <div class="container">
+        <div class="auth-container">
+            <h1 class="auth-title" id="authTitle">Login</h1>
+            
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('login')">Login</button>
+                <button class="tab" onclick="switchTab('cadastro')">Cadastro</button>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm" class="auth-form">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" placeholder="seu@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Senha</label>
+                    <input type="password" id="loginPassword" placeholder="Digite sua senha" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Entrar</button>
+            </form>
+
+            <!-- Cadastro Form -->
+            <form id="cadastroForm" class="auth-form" style="display: none;">
+                <div class="form-group">
+                    <label for="nome">Nome Completo</label>
+                    <input type="text" id="nome" placeholder="Seu nome completo" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="seu@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="telefone">Telefone (com DDD)</label>
+                    <input type="tel" id="telefone" placeholder="11999999999" required>
+                </div>
+                <div class="form-group">
+                    <label for="senha">Senha</label>
+                    <input type="password" id="senha" placeholder="Digite uma senha forte" required>
+                </div>
+
+                <!-- Campos específicos para comerciante -->
+                <div id="comercianteFields" style="display: none;">
+                    <div class="form-group">
+                        <label for="fotoPerfil">Foto de Perfil</label>
+                        <input type="file" id="fotoPerfil" accept="image/*" onchange="previewFoto(event)">
+                        <div class="image-preview" id="fotoPreview" style="margin-top: 0.5rem;">
+                            <div class="image-placeholder" style="width: 100px; height: 100px;">
+                                <p style="font-size: 0.85rem;">Nenhuma imagem</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Campos específicos para consumidor -->
+                <div id="consumidorFields" style="display: none;">
+                    <div class="form-group">
+                        <label for="fotoPerfil">Foto de Perfil</label>
+                        <input type="file" id="fotoPerfil" accept="image/*" onchange="previewFoto(event)">
+                        <div class="image-preview" id="fotoPreview" style="margin-top: 0.5rem;">
+                            <div class="image-placeholder" style="width: 100px; height: 100px;">
+                                <p style="font-size: 0.85rem;">Nenhuma imagem</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Cadastrar</button>
+            </form><br>
+
+            <center><button class="btn btn-secondary" onclick="goBack()">Voltar</button></center>
+        </div>
+    </div>
+
+    <script src="scripts/auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Comerciante</title>
+    <link rel="stylesheet" href="../styles/main.css">
+</head>
+<body>
+    <div class="dashboard">
+        <aside class="sidebar">
+            <div class="sidebar-profile-header">
+                <img id="sidebarProfilePic" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Crect width='80' height='80' fill='%23fff'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='36' fill='%23ff6b35'%3E👤%3C/text%3E%3C/svg%3E" alt="Perfil" class="profile-picture-sidebar" onclick="navigateTo('perfil')" title="Clique para acessar seu perfil">
+            </div>
+
+            <div class="sidebar-header">
+                <center><h2>Pizsaas🍕</h2></center>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item active" data-page="inicio" onclick="navigateTo('inicio')">Início</li>
+                <li class="nav-item" data-page="comercios" onclick="navigateTo('comercios')">Comércios</li>
+                <li class="nav-item" data-page="produtos" onclick="navigateTo('produtos')">Produtos</li>
+                <li class="nav-item" data-page="pedidos" onclick="navigateTo('pedidos')">Pedidos</li>
+                <li class="nav-item" onclick="logout()" style="color: #ffcccc; margin-top: auto; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 1rem;">Sair</li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <!-- Página Início -->
+            <div id="pageInicio" class="page active">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Bem-vindo ao Pizsaas</h1>
+                        <p class="page-subtitle">Gerencie seus comércios, produtos e pedidos</p>
+                    </div>
+                </div>
+
+                <div class="grid">
+                    <div class="card">
+                        <h3 class="card-title">Comércios Cadastrados</h3>
+                        <p style="font-size: 2.8rem; font-weight: 900; color: var(--primary); margin-top: 1rem;" id="totalComercios">0</p>
+                    </div>
+                    <div class="card">
+                        <h3 class="card-title">Produtos Cadastrados</h3>
+                        <p style="font-size: 2.8rem; font-weight: 900; color: var(--primary); margin-top: 1rem;" id="totalProdutos">0</p>
+                    </div>
+                    <div class="card">
+                        <h3 class="card-title">Pedidos Ainda Pendentes</h3>
+                        <p style="font-size: 2.8rem; font-weight: 900; color: var(--warning); margin-top: 1rem;" id="totalPedidos">0</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 class="card-title">Últimos Pedidos</h3>
+                    <div id="ultimosPedidos" style="margin-top: 1.5rem;"></div>
+                </div>
+            </div>
+
+            <!-- Página Comércios -->
+            <div id="pageComercios" class="page" style="display: none;">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Meus Comércios</h1>
+                        <p class="page-subtitle">Gerencie todos os seus comércios</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="openComercioModal()">+ Cadastrar Comércio</button>
+                </div>
+                <div id="comerciosList" class="grid"></div>
+            </div>
+
+            <!-- Página Produtos -->
+            <div id="pageProdutos" class="page" style="display: none;">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Meus Produtos</h1>
+                        <p class="page-subtitle">Gerenciar seu catálogo de produtos</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="openProdutoModal()">+ Cadastrar Produto</button>
+                </div>
+                <div id="produtosList" class="grid"></div>
+            </div>
+
+            <!-- Página Pedidos -->
+            <div id="pagePedidos" class="page" style="display: none;">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Pedidos</h1>
+                        <p class="page-subtitle">Acompanhe todos os seus pedidos</p>
+                    </div>
+                    <button class="btn btn-danger" onclick="limparTodosPedidos()">🗑 Limpar Pedidos</button>
+                </div>
+                <div id="pedidosList"></div>
+            </div>
+
+            <!-- Página Perfil -->
+            <div id="pagePerfil" class="page" style="display: none;">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Meu Perfil</h1>
+                        <p class="page-subtitle">Visualize e edite seus dados cadastrais</p>
+                    </div>
+                    <!-- Added delete profile button -->
+                    <button class="btn btn-danger" onclick="deleteProfile()" title="Excluir seu perfil permanentemente">🗑 Excluir Perfil</button>
+                </div>
+                
+                <div class="card" style="max-width: 700px;">
+                    <form id="perfilForm">
+                        <div class="form-group">
+                            <label for="perfilFoto">Foto de Perfil</label>
+                            <input type="file" id="perfilFoto" accept="image/*" onchange="previewPerfilFoto(event)">
+                            <div class="image-preview" id="perfilFotoPreview" style="margin-top: 0.5rem;">
+                                <div class="image-placeholder" style="width: 120px; height: 120px;">
+                                    <p style="font-size: 0.85rem;">Nenhuma imagem</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="perfilNome">Nome Completo</label>
+                            <input type="text" id="perfilNome" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="perfilEmail">E-mail</label>
+                            <input type="email" id="perfilEmail" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="perfilTelefone">Telefone</label>
+                            <input type="tel" id="perfilTelefone" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="perfilSenha">Nova Senha (deixe em branco para manter a atual)</label>
+                            <input type="password" id="perfilSenha">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal do Comércio -->
+    <div id="comercioModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="comercioModalTitle">Cadastrar Comércio</h2>
+                <button class="close-modal" onclick="closeComercioModal()">×</button>
+            </div>
+            <form id="comercioForm">
+                <input type="hidden" id="comercioId">
+                <div class="form-group">
+                    <label for="comercioNome">Nome do Comércio</label>
+                    <input type="text" id="comercioNome" required>
+                </div>
+                <div class="form-group">
+                    <label for="comercioCategoria">Categoria</label>
+                    <select id="comercioCategoria" required>
+                        <option value="">Selecione...</option>
+                        <option value="Alimentação">Alimentação</option>
+                        <option value="Vestuário">Vestuário</option>
+                        <option value="Eletrônicos">Eletrônicos</option>
+                        <option value="Farmácia">Farmácia</option>
+                        <option value="Serviços">Serviços</option>
+                        <option value="Outros">Outros</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="comercioEndereco">Endereço</label>
+                    <input type="text" id="comercioEndereco" required>
+                </div>
+                <div class="form-group">
+                    <label for="comercioTelefone">Telefone</label>
+                    <input type="tel" id="comercioTelefone" required>
+                </div>
+                <div class="form-group">
+                    <label for="comercioDescricao">Descrição</label>
+                    <textarea id="comercioDescricao" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Salvar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal do Produto -->
+    <div id="produtoModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="produtoModalTitle">Cadastrar Produto</h2>
+                <button class="close-modal" onclick="closeProdutoModal()">×</button>
+            </div>
+            <form id="produtoForm">
+                <input type="hidden" id="produtoId">
+                
+                <div class="form-group">
+                    <label for="produtoComercio">Comércio</label>
+                    <select id="produtoComercio" required>
+                        <option value="">Selecione um comércio...</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="produtoNome">Nome do Produto</label>
+                    <input type="text" id="produtoNome" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="produtoDescricao">Descrição</label>
+                    <textarea id="produtoDescricao" rows="3"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="produtoPreco">Preço (R$)</label>
+                    <input type="number" id="produtoPreco" step="0.01" min="0" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="produtoCategoria">Categoria</label>
+                    <select id="produtoCategoria" required>
+                        <option value="">Selecione...</option>
+                        <option value="Alimentos">Alimentos</option>
+                        <option value="Bebidas">Bebidas</option>
+                        <option value="Roupas">Roupas</option>
+                        <option value="Calçados">Calçados</option>
+                        <option value="Eletrônicos">Eletrônicos</option>
+                        <option value="Acessórios">Acessórios</option>
+                        <option value="Medicamentos">Medicamentos</option>
+                        <option value="Outros">Outros</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="produtoEstoque">Quantidade em Estoque</label>
+                    <input type="number" id="produtoEstoque" min="0" value="0" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="produtoImagem">Imagem do Produto</label>
+                    <input type="file" id="produtoImagem" accept="image/*" onchange="previewImage(event)">
+                    <div class="image-preview" id="imagePreview">
+                        <div class="image-placeholder">
+                            <p>Nenhuma imagem selecionada</p>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Salvar Produto</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="scripts/comerciante.js"></script>
+</body>
+</html>

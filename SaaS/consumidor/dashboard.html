@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil - Consumidor</title>
+    <link rel="stylesheet" href="../styles/main.css">
+</head>
+<body>
+    <div class="dashboard">
+        <aside class="sidebar">
+            <div class="sidebar-profile-header">
+                <img id="sidebarProfilePic" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Crect width='80' height='80' fill='%23fff'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='36' fill='%23ff6b35'%3E👤%3C/text%3E%3C/svg%3E" alt="Perfil" class="profile-picture-sidebar" onclick="navigateTo('perfil')" title="Clique para acessar seu perfil">
+            </div>
+
+            <div class="sidebar-header">
+                <center><h2>Pizsaas🍕
+                    
+                </h2></center>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item active" data-page="produtos" onclick="navigateTo('produtos')">Produtos</li>
+                <li class="nav-item" data-page="pedidos" onclick="navigateTo('pedidos')">Meus Pedidos</li>
+                <li class="nav-item" onclick="logout()" style="color: #ffcccc; margin-top: auto; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 1rem;">Sair</li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <!-- Página Produtos -->
+            <div id="pageProdutos" class="page active">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Produtos Disponíveis</h1>
+                        <p class="page-subtitle">Explore os produtos dos comércios da sua região</p>
+                    </div>
+                </div>
+
+                <div class="form-group" style="max-width: 400px; margin-bottom: 2rem;">
+                    <label for="filtroCategoria">Filtrar por Categoria</label>
+                    <select id="filtroCategoria" onchange="loadProdutos()">
+                        <option value="">Todas as Categorias</option>
+                        <option value="Alimentos">Alimentos</option>
+                        <option value="Bebidas">Bebidas</option>
+                    </select>
+                </div>
+
+                <div id="produtosList" class="grid"></div>
+            </div>
+
+            <!-- Página Meus Pedidos -->
+            <div id="pagePedidos" class="page" style="display: none;">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Meus Pedidos</h1>
+                        <p class="page-subtitle">Acompanhe o status dos seus pedidos</p>
+                    </div>
+                    <button class="btn btn-danger" onclick="limparTodosPedidos()">🗑 Limpar Pedidos</button>
+                </div>
+                <div id="pedidosList"></div>
+            </div>
+
+            <!-- Página Perfil -->
+            <div id="pagePerfil" class="page" style="display: none;">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Meu Perfil</h1>
+                        <p class="page-subtitle">Visualize e edite seus dados cadastrais</p>
+                    </div>
+                    <!-- Added delete profile button -->
+                    <button class="btn btn-danger" onclick="deleteProfile()" title="Excluir seu perfil permanentemente">🗑 Excluir Perfil</button>
+                </div>
+                
+                <div class="card" style="max-width: 700px;">
+                    <form id="perfilForm">
+                        <div class="form-group">
+                            <label for="perfilFoto">Foto de Perfil</label>
+                            <input type="file" id="perfilFoto" accept="image/*" onchange="previewPerfilFoto(event)">
+                            <div class="image-preview" id="perfilFotoPreview" style="margin-top: 0.5rem;">
+                                <div class="image-placeholder" style="width: 120px; height: 120px;">
+                                    <p style="font-size: 0.85rem;">Nenhuma imagem</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="perfilNome">Nome Completo</label>
+                            <input type="text" id="perfilNome" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="perfilEmail">E-mail</label>
+                            <input type="email" id="perfilEmail" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="perfilTelefone">Telefone</label>
+                            <input type="tel" id="perfilTelefone" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="perfilSenha">Nova Senha (deixe em branco para manter a atual)</label>
+                            <input type="password" id="perfilSenha">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal de Fazer Pedido -->
+    <div id="pedidoModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Fazer Pedido</h2>
+                <button class="close-modal" onclick="closePedidoModal()">×</button>
+            </div>
+
+            <div id="produtoDetalhes" style="margin-bottom: 1.5rem;"></div>
+
+            <form id="pedidoForm">
+                <input type="hidden" id="produtoId">
+                <input type="hidden" id="comercianteId">
+                <input type="hidden" id="valorProduto">
+
+                <div class="form-group">
+                    <label for="enderecoEntrega">Endereço de Entrega</label>
+                    <input type="text" id="enderecoEntrega" placeholder="Rua, número, bairro, cidade" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="pontoReferencia">Ponto de Referência (opcional)</label>
+                    <input type="text" id="pontoReferencia" placeholder="Ex: Próximo ao mercado">
+                </div>
+
+                <div class="form-group">
+                    <label for="observacoes">Observações (opcional)</label>
+                    <textarea id="observacoes" rows="3" placeholder="Alguma observação sobre o pedido?"></textarea>
+                </div>
+
+                <div style="background: var(--background); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                    <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Total do Pedido:</p>
+                    <p style="font-size: 1.75rem; font-weight: 700; color: var(--primary);" id="valorTotal">R$ 0,00</p>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Finalizar Pedido</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="scripts/consumidor.js"></script>
+</body>
+</html>

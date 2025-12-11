@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selecione seu Perfil</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <div class="container">
+        <div class="selection-container">
+            <h1 class="selection-title">Como você deseja acessar?</h1>
+            <p class="selection-subtitle">Escolha o perfil que melhor se adequa a você</p>
+            
+            <div class="cards-grid">
+                <div class="selection-card" onclick="selectType('comerciante')">
+                    <div class="card-icon">🏪</div>
+                    <h2 class="card-title">Sou Comerciante</h2>
+                    <p class="card-description">Cadastre seu comércio, adicione produtos e gerencie pedidos</p>
+                </div>
+                
+                <div class="selection-card" onclick="selectType('consumidor')">
+                    <div class="card-icon">🛒</div>
+                    <h2 class="card-title">Sou Consumidor</h2>
+                    <p class="card-description">Encontre produtos e faça pedidos dos melhores comércios</p>
+                </div>
+            </div>
+
+            <button class="btn btn-secondary" onclick="goBack()">Voltar</button>
+        </div>
+    </div>
+
+    <script>
+        function selectType(type) {
+            sessionStorage.setItem('userType', type);
+            window.location.href = 'auth.html';
+        }
+
+        function goBack() {
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
